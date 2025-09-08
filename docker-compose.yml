@@ -6,6 +6,8 @@ services:
     # web と同一ネットワーク名前空間を共有するため、こちらで 80 を公開
     ports:
       - "80:80"
+    volumes:
+      - ./app:/var/www/html # アプリケーションコードのディレクトリをマウント
 
   web:
     build:
