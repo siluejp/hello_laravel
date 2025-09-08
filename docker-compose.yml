@@ -1,23 +1,21 @@
 services:
-  web:
-    image: nginx:latest # または最新の Nginx 公式イメージ
-    ports:
-      - "8000:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf # Nginx の設定ファイルをマウント
-      - ./app:/var/www/html # アプリケーションコードのディレクトリをマウント
-    depends_on:
-      - php # php-fpm サービスを先に起動
-
   php:
-    image: php:7.2-fpm
-    volumes:
-      - ./app:/var/www/html # アプリケーションコードのディレクトリをマウント
-    command: bash -c "sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g; s|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && apt update -o Acquire::Check-Valid-Until=false && apt install -y git unzip && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && php-fpm"
-    # 必要な PHP 拡張モジュールがある場合は、以下のように追加できます。
-    # Example: docker-php-ext-installgd
-    # command: docker-php-ext-install zip && docker-php-ext-enable zip
-  
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    # web と同一ネットワーク名前空間を共有するため、こちらで 80 を公開
+    ports:
+      - "80:80"
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    # nginx.conf は 127.0.0.1:9000 を参照するため、php のネットワークを共有
+    network_mode: "service:php"
+    depends_on:
+      - php
+
   db:
     image: mysql/mysql-server:8.0
     environment:
