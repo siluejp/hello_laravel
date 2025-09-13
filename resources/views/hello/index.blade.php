@@ -10,7 +10,7 @@
     <p>{{$msg}}</p>
     @if (count($errors) > 0)
     <div>
-        <p>{{$msg}}</p>
+        <p>入力に問題があります。再入力してください。</p>
     </div>
     @endif
     <table>
