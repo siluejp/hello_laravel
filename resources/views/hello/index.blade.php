@@ -7,9 +7,30 @@
 @endsection
 
 @section('content')
-    <p>ここが本文のコンテンツです。</p>
-    <p>これは、<middleware>google.com</middleware>へのリンクです。</p>
-    <p>これは、<middleware>yahoo.com</middleware>へのリンクです。</p>
+    <p>{{$msg}}</p>
+    @if (count($errors) > 0)
+    <div>
+        <p>{{$msg}}</p>
+    </div>
+    @endif
+    <table>
+        <form action="/hello" method="post">
+            {{ csrf_field() }}
+            @if ($errors->has('name'))
+                <tr><th>ERROR</th><td>{{$errors->first('name')}}</td></tr>
+            @endif
+            <tr><th>name: </th><td><input type="text" name="name" value="{{ old('name')}}"></td></tr>
+            @if ($errors->has('mail'))
+                <tr><th>ERROR</th><td>{{$errors->first('mail')}}</td></tr>
+            @endif
+            <tr><th>mail: </th><td><input type="text" name="mail" value="{{ old('mail')}}"></td></tr>
+            @if ($errors->has('age'))
+                <tr><th>ERROR</th><td>{{$errors->first('age')}}</td></tr>
+            @endif
+            <tr><th>age: </th><td><input type="text" name="age" value="{{ old('age')}}"></td>
+            <tr><th></th><td><input type="submit" value="send"></td></tr>
+        </form>
+    </table>
 @endsection
 
 @section('footer')
