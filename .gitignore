@@ -15,3 +15,4 @@ yarn-error.log
 .devcontainer
 .editorconfig
 .DS_Store
+/storage/*
