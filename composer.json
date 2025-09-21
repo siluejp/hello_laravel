@@ -15,6 +15,8 @@
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
+        "nunomaduro/larastan": "^0.3",
+        "phpstan/phpstan": "^0.10",
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {
@@ -47,6 +49,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
+        ],
+        "phpstan": [
+            "@php vendor/bin/phpstan analyse --configuration=phpstan.neon"
         ]
     },
     "config": {

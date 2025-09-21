@@ -28,4 +28,6 @@ jobs:
           MAIL_DRIVER=array
           ENV
           touch database/database.sqlite
+      - name: Static analysis
+        run: composer phpstan -- --no-progress
       - run: vendor/bin/phpunit --configuration phpunit.xml
