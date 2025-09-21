@@ -11,4 +11,21 @@ jobs:
           php-version: '7.2'
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
+      - name: Prepare environment
+        run: |
+          cat <<'ENV' > .env.testing
+          APP_NAME=Laravel
+          APP_ENV=testing
+          APP_KEY=base64:g3Yua7bWVBJAyE6A44yWiNys8lm2Sleqrs9jwELyhlM=
+          APP_DEBUG=true
+          APP_URL=http://localhost
+          LOG_CHANNEL=stack
+          DB_CONNECTION=sqlite
+          DB_DATABASE=database/database.sqlite
+          CACHE_DRIVER=array
+          SESSION_DRIVER=array
+          QUEUE_DRIVER=sync
+          MAIL_DRIVER=array
+          ENV
+          touch database/database.sqlite
       - run: vendor/bin/phpunit --configuration phpunit.xml
