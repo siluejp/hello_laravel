@@ -26,6 +26,10 @@ runs:
       env:
         TASK_DEFINITION: ${{ inputs.task-definition }}
       shell: bash
+    - run: |
+        jq 'del(.enableFaultInjection)' "${RUNNER_TEMP}/task-def.json" > "${RUNNER_TEMP}/task-def.sanitized.json"
+        mv "${RUNNER_TEMP}/task-def.sanitized.json" "${RUNNER_TEMP}/task-def.json"
+      shell: bash
     - uses: aws-actions/amazon-ecs-render-task-definition@v1
       id: render
       with:
