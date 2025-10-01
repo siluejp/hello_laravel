@@ -24,6 +24,6 @@ runs:
       with:
         push: true
         context: ${{ github.workspace }}
-        file: ${{ github.workspace }}/${{ inputs.dockerfile-path }}
+        file: ${{ inputs.dockerfile-path }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
