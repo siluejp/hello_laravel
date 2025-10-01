@@ -21,7 +21,7 @@ jobs:
         id: build
         with:
           ecr-repository-uri-php: ${{ vars.ECR_REPOSITORY_URI_PHP }}
-          dockerfile-path: docker/php/
+          dockerfile-path: docker/php/Dockerfile
       - uses: ./.github/actions/container-deploy
         with:
           ecs-cluster: ${{ vars.ECS_CLUSTER_NAME }}
