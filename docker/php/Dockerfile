@@ -6,5 +6,5 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g; s
  && docker-php-ext-install pdo_mysql \
  && curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
-COPY app/ /var/www/html/
 WORKDIR /var/www/html
+COPY . /var/www/html/
