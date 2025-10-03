@@ -27,4 +27,3 @@ runs:
         file: ${{ inputs.dockerfile-path }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        platforms: linux/arm64/v8
