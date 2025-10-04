@@ -1,29 +1,59 @@
-name: Conainer Build
-description: コンテナイメージをビルドし、ECRRへプッシュします。
+name: Container Build
+description: コンテナイメージをビルドし、ECRへプッシュします。
 inputs:
   ecr-repository-uri-php:
     required: true
-    description: ECRリポジトリのURI
-  dockerfile-path:
+    description: PHPコンテナ用ECRリポジトリのURI
+  php-dockerfile-path:
     required: true
-    description: Dockerfileのパス
+    description: PHPコンテナのDockerfileパス
+  ecr-repository-uri-web:
+    required: true
+    description: Webコンテナ用ECRリポジトリのURI
+  web-dockerfile-path:
+    required: true
+    description: WebコンテナのDockerfileパス
 outputs:
   container-image:
-    value: ${{ steps.meta.outputs.tags }}
-    description: ビルドしたコンテナイメージ
+    value: ${{ steps.meta-php.outputs.tags }}
+    description: ビルドしたPHPコンテナイメージ
+  container-image-php:
+    value: ${{ steps.meta-php.outputs.tags }}
+    description: ビルドしたPHPコンテナイメージ
+  container-image-web:
+    value: ${{ steps.meta-web.outputs.tags }}
+    description: ビルドしたWebコンテナイメージ
 runs:
   using: composite
   steps:
+    - uses: docker/setup-qemu-action@v3
+      with:
+        platforms: arm64
+    - uses: docker/setup-buildx-action@v3
     - uses: aws-actions/amazon-ecr-login@v2
     - uses: docker/metadata-action@v5
-      id: meta
+      id: meta-php
       with:
         images: ${{ inputs.ecr-repository-uri-php }}
+        tags: type=sha,format=long
+    - uses: docker/metadata-action@v5
+      id: meta-web
+      with:
+        images: ${{ inputs.ecr-repository-uri-web }}
         tags: type=sha,format=long
     - uses: docker/build-push-action@v5
       with:
         push: true
         context: ${{ github.workspace }}
-        file: ${{ inputs.dockerfile-path }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        file: ${{ inputs.php-dockerfile-path }}
+        platforms: linux/arm64
+        tags: ${{ steps.meta-php.outputs.tags }}
+        labels: ${{ steps.meta-php.outputs.labels }}
+    - uses: docker/build-push-action@v5
+      with:
+        push: true
+        context: ${{ github.workspace }}
+        file: ${{ inputs.web-dockerfile-path }}
+        platforms: linux/arm64
+        tags: ${{ steps.meta-web.outputs.tags }}
+        labels: ${{ steps.meta-web.outputs.labels }}
