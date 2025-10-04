@@ -7,4 +7,6 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g; s
  && curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
 WORKDIR /var/www/html
+COPY composer.json composer.lock ./
+RUN composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader
 COPY . /var/www/html/
