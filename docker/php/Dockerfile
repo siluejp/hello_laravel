@@ -8,3 +8,4 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g; s
  && mv composer.phar /usr/local/bin/composer
 WORKDIR /var/www/html
 COPY . /var/www/html/
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
