@@ -12,4 +12,5 @@
  COPY database ./database
  RUN composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
  COPY . /var/www/html/
+ RUN chown -R www-data:www-data storage bootstrap/cache
  RUN composer run-script --no-ansi --no-interaction post-autoload-dump
