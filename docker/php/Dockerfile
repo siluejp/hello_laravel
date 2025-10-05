@@ -9,3 +9,9 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g; s
 WORKDIR /var/www/html
 COPY . /var/www/html/
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm"]
